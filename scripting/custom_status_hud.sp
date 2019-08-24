@@ -8,7 +8,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.0.0"
+#define PLUGIN_VERSION "1.0.1"
 public Plugin myinfo = {
 	name = "Custom Status HUD",
 	author = "nosoop",
@@ -46,7 +46,7 @@ public void OnMapStart() {
 
 public Action RequestHUDUpdate(Handle timer) {
 	for (int i = 1; i <= MaxClients; i++) {
-		if (IsClientInGame(i)) {
+		if (IsClientInGame(i) && !IsFakeClient(i)) {
 			ProcessHUDUpdate(i);
 		}
 	}
