@@ -8,7 +8,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.0.1"
+#define PLUGIN_VERSION "1.1.0"
 public Plugin myinfo = {
 	name = "Custom Status HUD",
 	author = "nosoop",
@@ -21,6 +21,9 @@ Handle g_HUDUpdateForward;
 Handle g_SyncDisplay;
 
 Handle g_PrefHudXPos, g_PrefHudYPos, g_PrefHudColor;
+
+ConVar g_ConVarUpdateInterval;
+float g_flNextUpdateTime;
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int maxlen) {
 	RegPluginLibrary("custom_status_hud");
@@ -38,13 +41,21 @@ public void OnPluginStart() {
 			"Preferred Y position for the Custom Status HUD", CookieAccess_Public);
 	g_PrefHudColor = RegClientCookie("statushud_color",
 			"Preferred color for the Custom Status HUD", CookieAccess_Public);
+	
+	g_ConVarUpdateInterval = CreateConVar("statushud_update_interval", "1.0",
+			"Rate that the Custom Status HUD is updated.", _, true, 0.0);
 }
 
 public void OnMapStart() {
-	CreateTimer(1.0, RequestHUDUpdate, .flags = TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+	g_flNextUpdateTime = 0.0;
 }
 
-public Action RequestHUDUpdate(Handle timer) {
+public void OnGameFrame() {
+	if (GetGameTime() < g_flNextUpdateTime) {
+		return;
+	}
+	
+	g_flNextUpdateTime = GetGameTime() + g_ConVarUpdateInterval.FloatValue;
 	for (int i = 1; i <= MaxClients; i++) {
 		if (IsClientInGame(i) && !IsFakeClient(i)) {
 			ProcessHUDUpdate(i);
@@ -84,7 +95,7 @@ void ProcessHUDUpdate(int client) {
 	int color;
 	GetClientHudTextParams(client, x, y, color);
 	
-	SetHudTextParams(x, y, 1.0,
+	SetHudTextParams(x, y, g_ConVarUpdateInterval.FloatValue,
 			(color >> 24) & 0xFF, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF);
 	
 	ShowSyncHudText(client, g_SyncDisplay, "%s", buffer);
