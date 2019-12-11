@@ -7,6 +7,9 @@
 /**
  * Called whenever the plugin is ready to update the custom client HUD.
  * 
+ * To add new lines for display, call `StringMap.SetString` on the `entries` argument with the
+ * additional text as the value.
+ * 
  * @param entries		A map of string values to be displayed.  Keys determine sorting in
  * 						alphabetical order.
  */
