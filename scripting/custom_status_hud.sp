@@ -42,7 +42,7 @@ public void OnPluginStart() {
 	g_PrefHudColor = RegClientCookie("statushud_color",
 			"Preferred color for the Custom Status HUD", CookieAccess_Public);
 	
-	g_ConVarUpdateInterval = CreateConVar("statushud_update_interval", "1.0",
+	g_ConVarUpdateInterval = CreateConVar("statushud_update_interval", "0.1",
 			"Rate that the Custom Status HUD is updated.", _, true, 0.0);
 }
 
