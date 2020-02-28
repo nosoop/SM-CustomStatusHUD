@@ -1,9 +1,12 @@
 # Custom Status HUD
 
 Provides a unified interface for plugins to write custom HUD content without having to deal
-with their own positioning.
+with their own positioning.  Basically a glorified wrapper around `SyncHud`.
 
-Intended for things like TF2 items being used on classes that normally can't equip them.
+## Server Options
+
+`statushud_update_interval` controls the time between HUD refresh intervals.  A higher number
+means that plugins will update the value less often.
 
 ## Client Options
 
