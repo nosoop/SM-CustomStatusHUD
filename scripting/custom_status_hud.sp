@@ -113,9 +113,7 @@ void GetClientHudTextParams(int client, float &x, float &y, int &color) {
 	
 	GetClientCookie(client, g_PrefHudColor, buffer, sizeof(buffer));
 	
-	if (buffer[0]) {
-		StringToIntEx(buffer, color, 16);
-	} else {
+	if (!buffer[0] || !StringToIntEx(buffer, color, 16)) {
 		color = 0xFFFF00FF;
 	}
 }
